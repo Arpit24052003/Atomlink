@@ -4,9 +4,8 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 const isPublicRoute = createRouteMatcher([
   '/', 
   '/api/webhooks/clerk',
-  '/manifest.json',    // Added: Manifest ko public karein
-  '/icons/(.*)',       // Added: Icons folder ko bhi public karein
-  '/favicon.ico'       // Safe bet
+  '/manifest.json',    // Added: Isko rasta do!
+  '/icons/(.*)'        // Added: Icons ko bhi jane do!
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
