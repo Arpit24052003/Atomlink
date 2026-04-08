@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next"; // Bas yahan Viewport add kar dijiye
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
@@ -14,7 +14,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   themeColor: "#00FFFF",
 };
-
+export const viewport: Viewport = {
+  themeColor: "#00FFFF",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 export default function RootLayout({
   children,
 }: Readonly<{
