@@ -192,7 +192,7 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
         
         {/* Persistent Watermark Background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 opacity-10 pointer-events-none flex flex-col items-center">
-          <img src="/Assets/Images/Logo_transparent.png" className="w-[85%] h-[85%] object-contain animate-[spin_25s_linear_infinite]" />
+          <img src="/Assets/Images/Logo_transparent.png?v=3" className="w-[85%] h-[85%] object-contain animate-[spin_25s_linear_infinite]" />
         </div>
 
         {/* Existing Messages */}

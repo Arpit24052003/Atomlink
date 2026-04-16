@@ -36,7 +36,7 @@ export default function RotatingLogo({ size = 48, glowColor = "rgba(0, 255, 255,
         
         {/* The Actual Logo Image */}
         <img 
-          src="/Assets/Images/Logo_transparent.png?update=1" 
+          src="/Assets/Images/Logo_transparent.png?v=3" 
           alt="Atomlink" 
           className="w-[70%] h-[70%] object-contain opacity-90"
         />

@@ -66,7 +66,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     return () => clearTimeout(timer);
   }, [startAudioSequence]);
 
-  // Stop the logic entirely upon single audio wrap-up
+  // Stop the logic early to cut short the later part of the voiceover
   useEffect(() => {
     const audioEl = audioRef.current;
     if (!audioEl) return;
@@ -74,9 +74,22 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
     const handleAudioEnd = () => {
       setPhase("identify"); // Destroys the audio visualizer implicitly 
     };
+
+    const handleTimeUpdate = () => {
+      // Cut audio early to only play: "Haay, May Atom link hu arpit dwara nirmit EK Jeevanth AI."
+      // You can adjust this 5.5 value up or down slightly to get the perfect cut
+      if (audioEl.currentTime >= 5.5) {
+        audioEl.pause();
+        handleAudioEnd();
+      }
+    };
     
     audioEl.addEventListener("ended", handleAudioEnd);
-    return () => audioEl.removeEventListener("ended", handleAudioEnd);
+    audioEl.addEventListener("timeupdate", handleTimeUpdate);
+    return () => {
+      audioEl.removeEventListener("ended", handleAudioEnd);
+      audioEl.removeEventListener("timeupdate", handleTimeUpdate);
+    };
   }, []);
 
   // Modal sci-fi sound effect
@@ -213,7 +226,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
 
                   {/* Logo Display: Fully transparent physical file */}
                   <img 
-                      src="/Assets/Images/Logo_transparent.png?update=1" 
+                      src="/Assets/Images/Logo_transparent.png?v=3" 
                       alt="Atomlink Orbital Core"
                       className="relative z-10 w-[70%] h-[70%] object-contain"
                   />
