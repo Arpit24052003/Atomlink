@@ -213,7 +213,7 @@ export default function CinematicIntro({ onComplete }: CinematicIntroProps) {
 
                   {/* Logo Display: Fully transparent physical file */}
                   <img 
-                      src="/Assets/Images/Logo_transparent.png" 
+                      src="/Assets/Images/Logo_transparent.png?update=1" 
                       alt="Atomlink Orbital Core"
                       className="relative z-10 w-[70%] h-[70%] object-contain"
                   />

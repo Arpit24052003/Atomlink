@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   title: "Atomlink 2.0",
   description: "Advanced Engineering Node",
   manifest: "/manifest.json",
-  themeColor: "#00FFFF",
 };
 export const viewport: Viewport = {
   themeColor: "#00FFFF",
