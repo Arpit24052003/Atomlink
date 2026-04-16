@@ -5,6 +5,18 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 
+// --- System Override: Suppress specific THREE.js depreciation warnings from R3F internal loop ---
+if (typeof console !== 'undefined') {
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    const msg = typeof args[0] === 'string' ? args[0] : '';
+    if (msg.includes('Clock:') && msg.includes('has been deprecated')) {
+      return; // Intercept and block
+    }
+    originalWarn(...args);
+  };
+}
+
 // Parallax Camera Controller
 function CameraRig() {
   useFrame((state) => {
