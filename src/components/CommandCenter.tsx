@@ -69,9 +69,36 @@ export default function CommandCenter({ userName }: CommandCenterProps) {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none"
           >
-             <div className="text-center glass-panel p-6 md:p-12 w-[90%] md:w-auto rounded-2xl border border-cyan-500/20 bg-black/60 backdrop-blur-xl shadow-[0_0_50px_rgba(0,255,255,0.1)]">
-                <h2 className="text-2xl md:text-4xl font-mono text-cyan-400 mb-4 animate-pulse uppercase tracking-widest leading-tight">Atom Link Established</h2>
-                <p className="text-sm md:text-xl text-gray-300 font-mono tracking-widest">Welcome to the command center, <span className="text-white font-bold">{userName}</span>.</p>
+             <div className="text-center p-4 md:p-16 w-[95%] md:w-auto relative group flex flex-col items-center justify-center">
+                {/* Decorative Tech Corners */}
+                <div className="absolute top-0 left-0 w-6 h-6 md:w-8 md:h-8 border-t-2 border-l-2 border-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.5)]"></div>
+                <div className="absolute top-0 right-0 w-6 h-6 md:w-8 md:h-8 border-t-2 border-r-2 border-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.5)]"></div>
+                <div className="absolute bottom-0 left-0 w-6 h-6 md:w-8 md:h-8 border-b-2 border-l-2 border-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.5)]"></div>
+                <div className="absolute bottom-0 right-0 w-6 h-6 md:w-8 md:h-8 border-b-2 border-r-2 border-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.5)]"></div>
+
+                {/* Cyber-style Header */}
+                <h2 className="text-[18px] md:text-5xl font-mono text-white mb-6 uppercase tracking-[0.2em] md:tracking-[0.4em] leading-tight drop-shadow-[0_0_20px_rgba(0,255,255,0.8)] flex flex-col items-center gap-1 md:gap-2">
+                  <span className="text-[9px] md:text-[14px] text-cyan-500 tracking-[0.3em] md:tracking-[0.5em] mb-1 md:mb-2 animate-pulse">[ NEURAL LINK ACTIVE ]</span>
+                  Atom Link Established
+                </h2>
+
+                <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 border-t border-b border-cyan-500/30 py-3 md:py-4 px-2 md:px-8 bg-black/60 backdrop-blur-md shadow-[inset_0_0_20px_rgba(0,255,255,0.2)]">
+                   <div className="hidden md:block w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+                   <p className="text-[9px] md:text-lg text-cyan-200/90 font-mono tracking-[0.15em] md:tracking-[0.3em] uppercase max-w-full text-center">
+                     Welcome to command center,<br className="md:hidden" />
+                     <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] font-bold ml-1">{userName}</span>
+                   </p>
+                </div>
+
+                {/* Progress Visualizer */}
+                <div className="w-[80%] md:w-full max-w-sm h-[2px] bg-cyan-900/40 mt-6 md:mt-8 relative overflow-hidden">
+                  <motion.div 
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 2.5, ease: "easeInOut" }}
+                    className="absolute top-0 left-0 h-full bg-cyan-400 shadow-[0_0_10px_rgba(0,255,255,0.8)]" 
+                  />
+                </div>
              </div>
           </motion.div>
         ) : (

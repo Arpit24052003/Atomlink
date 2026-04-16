@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Atomlink 2.0",
+  title: "Atomlink",
   description: "Advanced Engineering Node",
   manifest: "/manifest.json",
 };
