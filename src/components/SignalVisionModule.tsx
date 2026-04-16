@@ -42,11 +42,12 @@ export default function SignalVisionModule({ onBack, userName = "Arpit" }: Signa
     setAnalysisResult(""); // Reset previous result
 
     try {
-      const prompt = `You are now in Signal Vision Mode. Analyze this engineering visual (Circuit, Waveform, or Graph). 
-      Provide: 
-      1. Identification 
-      2. Key Parameters/Values 
-      3. Theoretical Implications (e.g., if it's a phasor diagram, explain the lead/lag).`;
+      const prompt = `You are now in Signal Vision Mode. Analyze this engineering visual. 
+      You MUST apply a strict Reasoning Layer using Chain-of-Thought (CoT):
+      1. Identification: Clearly identify the circuit, waveform, or system.
+      2. Reasoning Layer: Explicitly write out the underlying KCL/KVL equations or Nodal/Mesh analysis steps. Show your work block-by-block.
+      3. Cross-Validation: Strictly cross-check your derived mathematical deductions against any visual parameters before finalizing the output.
+      4. Parameters & Implications: Finalize key values and theoretical states (e.g. phasor lead/lag, filter type).`;
       
       const response = await sendMessageToAtomlink(prompt, [], userName, selectedImage, mimeType || undefined);
       
@@ -66,10 +67,10 @@ export default function SignalVisionModule({ onBack, userName = "Arpit" }: Signa
       className="w-full max-w-5xl h-[90vh] md:h-[650px] overflow-y-auto md:overflow-hidden flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-4 md:p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative"
     >
       {/* Glitch Overlay Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 border-b border-cyan-500/20 pb-4 gap-4 md:gap-0 shrink-0">
-        <div className="flex items-center gap-3 md:gap-4 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-center mb-6 md:mb-8 border-b border-cyan-500/20 pb-4 gap-6 md:gap-0 shrink-0 z-10 relative">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-4 w-full md:w-auto text-center sm:text-left">
           <RotatingLogo size={42} glowColor="rgba(0, 255, 255, 0.4)" />
-          <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase">Signal Vision Core</h2>
+          <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase mt-1">Signal Vision Core</h2>
         </div>
         <button 
           onClick={() => {

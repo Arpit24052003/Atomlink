@@ -50,12 +50,12 @@ export default function QuantumCoreModule({ onBack, userName = "Arpit" }: Quantu
       className="w-full max-w-5xl h-[90vh] md:h-[650px] overflow-y-auto md:overflow-hidden flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-4 md:p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative gap-4 md:gap-8"
     >
       {/* Module Hub Title */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-cyan-500/20 pb-4 md:pb-6 gap-4 md:gap-0 shrink-0">
-        <div className="flex items-center gap-3 md:gap-5 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-center border-b border-cyan-500/20 pb-4 md:pb-6 gap-6 md:gap-0 shrink-0 z-10 relative">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 w-full md:w-auto text-center sm:text-left">
           <RotatingLogo size={44} glowColor="rgba(0, 255, 255, 0.4)" />
           <div>
-            <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase">Quantum Core Hub</h2>
-            <p className="text-[9px] text-cyan-400 opacity-60 tracking-[0.2em] font-mono uppercase font-medium">Deep Research Console v3.1</p>
+            <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase mt-1">Quantum Core Hub</h2>
+            <p className="text-[9px] text-cyan-400 opacity-60 tracking-[0.2em] font-mono uppercase font-medium mt-1">Deep Research Console</p>
           </div>
         </div>
         <button 
@@ -119,26 +119,34 @@ export default function QuantumCoreModule({ onBack, userName = "Arpit" }: Quantu
                 </div>
              </div>
              
-             <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">
+             <div className="flex-1 p-8 overflow-y-auto max-h-[60vh] md:max-h-[70vh] custom-scrollbar relative">
                 {researchData ? (
-                  <div className="markdown-research-content prose prose-invert max-w-none">
-                    <ReactMarkdown 
-                       remarkPlugins={[remarkGfm, remarkMath]}
-                       rehypePlugins={[rehypeKatex]}
-                       components={{
-                         h1: ({node, ...props}) => <h1 className="text-cyan-400 font-bold mb-6 text-3xl border-b border-cyan-500/20 pb-4 tracking-tighter" {...props} />,
-                         h2: ({node, ...props}) => <h2 className="text-emerald-400 font-mono text-lg mt-10 mb-4 uppercase tracking-[0.2em]" {...props} />,
-                         strong: ({node, ...props}) => <strong className="text-cyan-300 font-bold shadow-[0_0_10px_rgba(0,255,255,0.4)]" {...props} />,
-                         p: ({node, ...props}) => <p className="text-[15px] leading-relaxed mb-6 text-cyan-100/90 font-light" {...props} />,
-                         code: ({node, ...props}) => <code className="bg-cyan-950/40 text-cyan-200 px-1.5 py-0.5 rounded font-mono" {...props} />,
-                         pre: ({node, ...props}) => <pre className="bg-black border border-cyan-500/20 p-6 rounded-2xl my-8 overflow-x-auto shadow-[inset_0_0_10px_rgba(0,255,255,0.1)] text-cyan-200" {...props} />,
-                         ul: ({node, ...props}) => <ul className="list-disc list-outside mb-6 pl-5 space-y-2 text-cyan-100/80" {...props} />,
-                         li: ({node, ...props}) => <li className="marker:text-emerald-500" {...props} />,
-                       }}
-                    >
-                      {researchData}
-                    </ReactMarkdown>
-                  </div>
+                  <>
+                    <div className="markdown-research-content prose prose-invert max-w-none pb-12">
+                      <ReactMarkdown 
+                         remarkPlugins={[remarkGfm, remarkMath]}
+                         rehypePlugins={[rehypeKatex]}
+                         components={{
+                           h1: ({node, ...props}) => <h1 className="text-cyan-400 font-bold mb-6 text-3xl border-b border-cyan-500/20 pb-4 tracking-tighter" {...props} />,
+                           h2: ({node, ...props}) => <h2 className="text-emerald-400 font-mono text-lg mt-10 mb-4 uppercase tracking-[0.2em]" {...props} />,
+                           strong: ({node, ...props}) => <strong className="text-cyan-300 font-bold shadow-[0_0_10px_rgba(0,255,255,0.4)]" {...props} />,
+                           p: ({node, ...props}) => <p className="text-[15px] leading-relaxed mb-6 text-cyan-100/90 font-light" {...props} />,
+                           code: ({node, ...props}) => <code className="bg-cyan-950/40 text-cyan-200 px-1.5 py-0.5 rounded font-mono" {...props} />,
+                           pre: ({node, ...props}) => <pre className="bg-black border border-cyan-500/20 p-6 rounded-2xl my-8 overflow-x-auto shadow-[inset_0_0_10px_rgba(0,255,255,0.1)] text-cyan-200" {...props} />,
+                           ul: ({node, ...props}) => <ul className="list-disc list-outside mb-6 pl-5 space-y-2 text-cyan-100/80" {...props} />,
+                           li: ({node, ...props}) => <li className="marker:text-emerald-500" {...props} />,
+                         }}
+                      >
+                        {researchData}
+                      </ReactMarkdown>
+                    </div>
+                    {/* Visual Scroll Cue */}
+                    <div className="sticky bottom-0 w-full flex justify-end pointer-events-none pt-4">
+                      <div className="animate-bounce bg-black/80 text-cyan-400 text-[10px] uppercase tracking-[0.2em] px-4 py-2 border border-cyan-500/30 rounded-full font-mono shadow-[0_0_15px_rgba(0,255,255,0.2)]">
+                        ↓ Scroll Pipeline
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center">
                      <div className="relative mb-8">

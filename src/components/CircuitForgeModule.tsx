@@ -34,7 +34,7 @@ export default function CircuitForgeModule({ onBack, userName = "Arpit" }: Circu
       const prompt = `You are the Circuit Forge Engine. Your goal is to synthesize schematics. 
       When a user provides a requirement ("${requirements}"), provide: 
       1. A brief 'Intuition' 
-      2. A 'Schematic' (using ASCII or clear lists) 
+      2. A 'Schematic'. You MUST provide the schematic as raw, renderable SVG syntax wrapped inside an \`\`\`xml code block. Use clear stroke colors and minimal styling to illustrate the components.
       3. A 'Component BOM' table 
       4. Technical 'Design Formulas' using LaTeX.`;
 
@@ -55,12 +55,12 @@ export default function CircuitForgeModule({ onBack, userName = "Arpit" }: Circu
       className="w-full max-w-5xl h-[90vh] md:h-[650px] overflow-y-auto md:overflow-hidden flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-4 md:p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative gap-4 md:gap-8"
     >
       {/* Header with Forge Status */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-cyan-500/20 pb-4 md:pb-6 gap-4 md:gap-0 shrink-0">
-        <div className="flex items-center gap-3 md:gap-5 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center md:items-center border-b border-cyan-500/20 pb-4 md:pb-6 gap-6 md:gap-0 shrink-0 z-10 relative">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 w-full md:w-auto text-center sm:text-left">
           <RotatingLogo size={48} glowColor="rgba(0, 255, 255, 0.4)" />
           <div>
             <h2 className="text-3xl font-mono tracking-[0.4em] text-cyan-100 uppercase">Circuit Forge</h2>
-            <p className="text-[10px] text-cyan-500/60 tracking-[0.1em] uppercase font-mono">Schematic Synthesis Engine v2.0</p>
+            <p className="text-[10px] text-cyan-500/60 tracking-[0.1em] uppercase font-mono mt-1">Schematic Synthesis Engine</p>
           </div>
         </div>
         <button 
@@ -134,7 +134,32 @@ export default function CircuitForgeModule({ onBack, userName = "Arpit" }: Circu
                     h2: ({node, ...props}) => <h2 className="text-cyan-300 font-mono text-lg mt-8 mb-4 tracking-[0.1em]" {...props} />,
                     strong: ({node, ...props}) => <strong className="text-cyan-400 font-semibold uppercase tracking-widest text-[11px]" {...props} />,
                     pre: ({node, ...props}) => <pre className="bg-black/80 border border-cyan-500/20 p-6 rounded-xl overflow-x-auto my-6 shadow-inner text-cyan-200" {...props} />,
-                    code: ({node, ...props}) => <code className="text-cyan-100/90 font-mono" {...props} />,
+                    code: ({node, inline, className, children, ...props}: any) => {
+                      const match = /language-(\w+)/.exec(className || '');
+                      const codeContent = String(children).replace(/\n$/, '');
+                      if (!inline && match && (match[1] === 'xml' || match[1] === 'html' || match[1] === 'svg') && codeContent.includes('<svg')) {
+                        return (
+                          <div className="flex flex-col gap-3 my-6 border border-cyan-500/30 rounded-xl p-4 bg-black/40">
+                            <div className="bg-cyan-950/20 p-4 rounded-xl flex justify-center items-center overflow-x-auto min-h-[200px]" dangerouslySetInnerHTML={{ __html: codeContent }} />
+                            <button 
+                              onClick={() => {
+                                const blob = new Blob([codeContent], { type: 'image/svg+xml' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'circuit-schematic.svg';
+                                a.click();
+                                URL.revokeObjectURL(url);
+                              }}
+                              className="px-6 py-3 bg-cyan-600/20 border border-cyan-500/50 rounded-lg text-cyan-100 text-[11px] font-mono uppercase hover:bg-cyan-500 hover:text-black transition-all w-full sm:w-fit self-end tracking-widest shadow-[0_0_15px_rgba(0,255,255,0.1)]"
+                            >
+                              [ Download Schematic ]
+                            </button>
+                          </div>
+                        );
+                      }
+                      return <code className={`bg-cyan-950/40 text-cyan-200 px-1.5 py-0.5 rounded font-mono ${className || ''}`} {...props}>{children}</code>;
+                    },
                     table: ({node, ...props}) => (
                       <div className="overflow-x-auto my-6 border border-cyan-500/20 rounded-xl">
                         <table className="w-full text-left" {...props} />
