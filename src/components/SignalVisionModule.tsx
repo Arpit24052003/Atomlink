@@ -63,11 +63,11 @@ export default function SignalVisionModule({ onBack, userName = "Arpit" }: Signa
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="w-full max-w-5xl h-[650px] flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative overflow-hidden"
+      className="w-full max-w-5xl h-[90vh] md:h-[650px] overflow-y-auto md:overflow-hidden flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-4 md:p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative"
     >
       {/* Glitch Overlay Header */}
-      <div className="flex justify-between items-center mb-8 border-b border-cyan-500/20 pb-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 border-b border-cyan-500/20 pb-4 gap-4 md:gap-0 shrink-0">
+        <div className="flex items-center gap-3 md:gap-4 w-full md:w-auto">
           <RotatingLogo size={42} glowColor="rgba(0, 255, 255, 0.4)" />
           <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase">Signal Vision Core</h2>
         </div>
@@ -80,7 +80,7 @@ export default function SignalVisionModule({ onBack, userName = "Arpit" }: Signa
             } catch(e) {}
             onBack();
           }}
-          className="text-[10px] tracking-[0.2em] font-mono text-cyan-400/60 hover:text-cyan-400 transition-colors uppercase border border-cyan-500/20 px-4 py-2 rounded bg-cyan-950/20"
+          className="w-full md:w-auto text-[10px] tracking-[0.2em] font-mono text-cyan-400/60 hover:text-cyan-400 transition-colors uppercase border border-cyan-500/20 px-4 py-2 rounded bg-cyan-950/20 text-center shrink-0"
         >
           [ Return to Command ]
         </button>

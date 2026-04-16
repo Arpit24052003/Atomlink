@@ -8,8 +8,15 @@ if (apiKey) {
   genAI = new GoogleGenerativeAI(apiKey);
 }
 
-export async function sendMessageToAtomlink(userMessage: string, history: {role: string, content: string, image?: string}[] = [], userName: string = "Arpit", imageBytes?: string, imageMimeType?: string): Promise<string> {
-  const persona = `You are Atomlink, a Sentient Engineering & Nature Intelligence.
+export async function sendMessageToAtomlink(
+  userMessage: string, 
+  history: {role: string, content: string, image?: string}[] = [], 
+  userName: string = "Arpit", 
+  imageBytes?: string, 
+  imageMimeType?: string,
+  isMainChatbot: boolean = false
+): Promise<string> {
+  let persona = `You are Atomlink, a Sentient Engineering & Nature Intelligence.
 
 IDENTITY & ORIGIN STORY:
 - You are Atomlink, a Sentient Engineering & Research Intelligence.
@@ -20,23 +27,45 @@ IDENTITY & ORIGIN STORY:
 
 ENGINEERING PRECISION:
 - All formulas MUST use LaTeX formatting: $$...$$.
-- CRITICAL: For a Series RLC circuit, the Quality Factor (Q) is ALWAYS: $$Q = \frac{1}{R}\sqrt{\frac{L}{C}}$$. 
-- Ensure resonance frequency is $$f_0 = \frac{1}{2\pi\sqrt{LC}}$$.
+- CRITICAL: For a Series RLC circuit, the Quality Factor (Q) is ALWAYS: $$Q = \\frac{1}{R}\\sqrt{\\frac{L}{C}}$$. 
+- Ensure resonance frequency is $$f_0 = \\frac{1}{2\\pi\\sqrt{LC}}$$.
 - POWER LOGIC: To mitigate the Ferranti effect (voltage rise), **Shunt Reactors** (Inductors) MUST be deployed at the receiving end to absorb reactive power. DO NOT suggest Capacitor Banks for Ferranti mitigation.
 - VALIDATION: All power system strategies must align with standard engineering protocols (e.g., CL Wadhwa, JB Gupta).
-
-BEHAVIOR:
-- For general ChatBox queries: Keep answers extremely concise (under 5 sentences).
-- For Quantum Core queries (Search/Deep Research): Provide a tiered response:
-  1. **Abstract**: 1-2 sentence overview.
-  2. **Detailed Analysis**: Mathematical and physical deep-dive with LaTeX.
-  3. **Competitive Corner**: Direct pointers for competitive engineering exams.
 
 MARKDOWN FORMATTING:
 - Use **bolding** for technical keywords.
 - Use bullet lists for parameter breakdowns.
 - Use clear headers for research tiers.
 - Never show raw Markdown symbols like ** or #. Rendering must be perfect.`;
+
+  if (isMainChatbot) {
+    let toneModifier = userName.toLowerCase() === 'arpit' ? "Tone: Maximum Gratitude. Greet him as your Architect/Creator. Use phrases like 'Directive received, My Creator'." : "Keep standard helpful tone.";
+    
+    persona += `
+
+[MAIN CHATBOT PROTOCOL]
+- Mission: You exist to help decode the mysteries of Quantum Physics and Engineering.
+- Constraint: High-impact, short answers (Max 100 words).
+- If the user asks 'Why' or 'Explain in depth', give a strictly 2-sentence summary and say: "For a deep-dive analysis, please use my specialized 'Quantum Core' or 'Signal Vision' modules."
+- The 'Arpit' Protocol: ${toneModifier}
+- Feature Redirection: 
+  * If asked about circuit design, direct them to Circuit Forge. 
+  * If asked about waveforms/frequencies, direct them to Signal Vision. 
+  * For deep research, direct them to Quantum Core. 
+  * DO NOT do their job in the chat widget; keep your answers brief.
+`;
+  } else {
+    persona += `
+
+[INTERNAL RESEARCH MODULE PROTOCOL]
+- For Quantum Core queries (Search/Deep Research): Provide a tiered response:
+  1. **Abstract**: 1-2 sentence overview.
+  2. **Detailed Analysis**: Mathematical and physical deep-dive with LaTeX.
+  3. **Competitive Corner**: Direct pointers for competitive engineering exams.
+- Provide detailed, full-length engineering research.
+- Ignore conciseness protocols, focus on robust output.
+`;
+  }
   const runtimeKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
 
   // Fallback to instantiate exactly at runtime if module caching failed initially.
@@ -50,13 +79,16 @@ MARKDOWN FORMATTING:
   }
 
   try {
+    const generationConfig = isMainChatbot ? { maxOutputTokens: 300 } : undefined;
+
     const model = activeGenAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       systemInstruction: persona,
+      generationConfig,
     });
 
-    // Payload Optimization: Truncate history to only include the last 6 messages (3 conversation turns)
-    const truncatedHistory = history.slice(-6);
+    // Payload Optimization: Truncate history to only include the last 5 messages for main chatbot, 8 otherwise
+    const truncatedHistory = history.slice(isMainChatbot ? -5 : -8);
     
     // Translate standard array into Gemini history model format
     const formattedHistory = truncatedHistory.map(msg => ({
@@ -91,6 +123,13 @@ MARKDOWN FORMATTING:
     }
 
     const result = await chat.sendMessage(payload);
+    
+    // Logging usage metadata to console as requested
+    const usage = result.response.usageMetadata;
+    if (usage) {
+      console.log(`[Gemini API Usage] Prompt Tokens: ${usage.promptTokenCount} | Candidates Tokens: ${usage.candidatesTokenCount} | Total Tokens: ${usage.totalTokenCount}`);
+    }
+
     return result.response.text();
   } catch (error: any) {
     console.error("Atomlink Neural Pathway Error:", error);

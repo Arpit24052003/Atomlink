@@ -47,11 +47,11 @@ export default function QuantumCoreModule({ onBack, userName = "Arpit" }: Quantu
       initial={{ opacity: 0, filter: "blur(20px)" }}
       animate={{ opacity: 1, filter: "blur(0px)" }}
       exit={{ opacity: 0, filter: "blur(20px)" }}
-      className="w-full max-w-5xl h-[650px] flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative overflow-hidden gap-8"
+      className="w-full max-w-5xl h-[90vh] md:h-[650px] overflow-y-auto md:overflow-hidden flex flex-col bg-[#001015]/95 backdrop-blur-2xl border border-cyan-500/30 rounded-2xl p-4 md:p-8 shadow-[0_0_50px_rgba(0,255,255,0.4)] relative gap-4 md:gap-8"
     >
       {/* Module Hub Title */}
-      <div className="flex justify-between items-center border-b border-cyan-500/20 pb-6">
-        <div className="flex items-center gap-5">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-cyan-500/20 pb-4 md:pb-6 gap-4 md:gap-0 shrink-0">
+        <div className="flex items-center gap-3 md:gap-5 w-full md:w-auto">
           <RotatingLogo size={44} glowColor="rgba(0, 255, 255, 0.4)" />
           <div>
             <h2 className="text-2xl font-mono tracking-[0.3em] text-cyan-100 uppercase">Quantum Core Hub</h2>
@@ -67,7 +67,7 @@ export default function QuantumCoreModule({ onBack, userName = "Arpit" }: Quantu
             } catch(e) {}
             onBack();
           }}
-          className="px-6 py-2 border border-cyan-500/20 rounded-full font-mono text-[10px] tracking-widest text-cyan-400/60 hover:text-cyan-100 hover:border-cyan-400 transition-all uppercase bg-cyan-950/20"
+          className="w-full md:w-auto px-6 py-2 border border-cyan-500/20 rounded-full font-mono text-[10px] tracking-widest text-cyan-400/60 hover:text-cyan-100 hover:border-cyan-400 transition-all uppercase bg-cyan-950/20 text-center shrink-0"
         >
           [ Terminate Link ]
         </button>

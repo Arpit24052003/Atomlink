@@ -30,6 +30,7 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
   const [attachedMimeType, setAttachedMimeType] = useState<string | null>(null);
   
   // Rate Limiting & Optimization States
+  const isSubmittingRef = useRef(false);
   const [lastRequestTime, setLastRequestTime] = useState(0);
   const [isDebouncing, setIsDebouncing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -101,6 +102,8 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
   }, [isTyping, pendingText]);
 
   const handleSend = async () => {
+    if (isSubmittingRef.current) return;
+
     const now = Date.now();
     
     // Strict 5-second debounce logic restored to protect API quota
@@ -113,6 +116,7 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
     // Safety guards for existing process
     if (isLoading || isTyping || (!inputText.trim() && !attachedImage)) return;
     
+    isSubmittingRef.current = true;
     try {
       const audio = new Audio('/Assets/Sounds/sci_fi_interface.mp3');
       audio.volume = 0.5;
@@ -142,7 +146,7 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
     setIsLoading(true);
     
     try {
-      const response = await sendMessageToAtomlink(userMsg, messages, userName, imgBase64 || undefined, imgMime || undefined);
+      const response = await sendMessageToAtomlink(userMsg, messages, userName, imgBase64 || undefined, imgMime || undefined, true);
       setIsLoading(false);
 
       if (response.includes("429") || response.includes("quota") || response.includes("Too Many Requests")) {
@@ -173,6 +177,8 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
       setIsLoading(false);
       setErrorMessage("SYSTEM FAILURE: Communication link lost.");
       setCanRetry(true);
+    } finally {
+      isSubmittingRef.current = false;
     }
   };
 
@@ -306,7 +312,10 @@ export default function ChatBox({ handleChatStart, playInteractionSound, userNam
           placeholder={errorMessage ? "SYSTEM COOLING..." : "ENTER DIRECTIVE..."}
           className={`flex-grow bg-transparent border-none outline-none font-mono text-[13px] md:text-[11px] p-2 md:p-0 tracking-widest uppercase focus:ring-0 ${errorMessage ? 'text-red-400' : 'text-cyan-200 placeholder-cyan-800/80'}`}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && (inputText.trim() || attachedImage)) handleSend();
+            if (e.key === "Enter" && (inputText.trim() || attachedImage)) {
+              e.preventDefault();
+              handleSend();
+            }
           }}
           disabled={isLoading || isTyping || !!errorMessage}
         />
